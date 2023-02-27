@@ -1,5 +1,7 @@
 import json
 
+import msal
+
 
 def loadConfig():
     # Load config from config.json
