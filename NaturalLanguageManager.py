@@ -15,6 +15,7 @@ def parse_NL(prompt):
         prompt=preprompt+prompt,
         max_tokens=1024,
         temperature=0.5,
+        messages=[{"role": "user", "content": "Tell the world about the ChatGPT API in the style of a pirate."}]
     )
 
     # Extract the generated text from the API response
