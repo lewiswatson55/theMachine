@@ -6,23 +6,24 @@ import helperBois as hb
 config = hb.loadConfig()  # Load the config file
 openai.api_key = config['openai_key']  # replace with your API key
 
-preprompt = "You are the interface for a calendar, you must parse the user's input into a json object in the form: {\"task\": \"1\",\"event\": {\"start\": \"2023-03-01T09:00:00\",\"end\": \"2023-03-01T11:00:00\",\"title\": \"Team meeting\"}} and return it. You must reason from the user's input as to what task is being completed: create, delete, edit, unknown (event title should default to: UNKNOWN). And you must reason what the data to be entered to the JSON object is. The current year is 2023, today is the 28th of feb. You will not make time assumptions, if no time from the user assume all day You will only return the JSON and nothing else.\nUser:"
+preprompt = "You are the interface for a calendar, you must parse the user's input into a json object in the form: {\"task\": \"1\",\"event\": {\"start\": \"2023-03-01T09:00:00\",\"end\": \"2023-03-01T11:00:00\",\"title\": \"Team meeting\"}} and return it. You must reason from the user's input as to what task is being completed, the type of task may not be specifically stated but you should infer the task based on text. Task types are: : create, delete, edit, unknown. And you must reason what the data to be entered to the JSON object is. The current year is 2023, today is the 28th of feb. You will not make time assumptions, if no time from the user assume all day You will only return the JSON and nothing else.\nUser:"
 
 def parse_NL(prompt):
     # Call OpenAI's GPT-3 model to generate text
-    response = openai.Completion.create(
-        engine="gpt-3.5-turbo",
-        prompt=preprompt+prompt,
+    response = openai.ChatCompletion.create(
+        model="gpt-3.5-turbo",
         max_tokens=1024,
-        temperature=0.5,
-        messages=[{"role": "user", "content": "Tell the world about the ChatGPT API in the style of a pirate."}]
+        messages=[
+            {"role": "system", "content": str(preprompt)},
+            {"role": "user", "content": str(prompt)}
+        ]
     )
 
     # Extract the generated text from the API response
-    text = response.choices[0].text.strip()
+    #text = response.choices[0].text.strip()
 
     # Return json object
-    return json.loads(text)
+    return response # json.loads(text)
 
 
 # Dummy code for dentist appointment returns string of JSON
