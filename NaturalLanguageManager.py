@@ -11,7 +11,7 @@ preprompt = "You are the interface for a calendar, you must parse the user's inp
 def parse_NL(prompt):
     # Call OpenAI's GPT-3 model to generate text
     response = openai.Completion.create(
-        engine="text-davinci-003",
+        engine="gpt-3.5-turbo",
         prompt=preprompt+prompt,
         max_tokens=1024,
         temperature=0.5,
