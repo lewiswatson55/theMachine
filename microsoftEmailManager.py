@@ -62,5 +62,3 @@ def create_event(start_time, end_time, title):
         return event_id
     else:
         raise Exception('Error creating event: ' + response.text)
-
-create_event('2023-01-01T09:00:00', '2023-01-01T11:00:00', 'Team meeting')
